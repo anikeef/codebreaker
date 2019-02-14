@@ -10,19 +10,23 @@ get "/" do
 end
 
 get "/:mode" do
-  if params["mode"] == "guess"
-    session["game"] = session["game"].class == GuessGame ? session["game"] : GuessGame.new
-  else
-    session["game"] = session["game"].class == AskGame ? session["game"] : AskGame.new
-  end
+  game_class = params["mode"] == "guess" ? GuessGame : AskGame
+  session["game"] = session["game"].class == game_class ? session["game"] : game_class.new
   @game = session["game"]
-  redirect "/#{params["mode"]}/win" if @game.win
   @guesses = @game.guesses
+  @message = session.delete("message")
+  redirect "/#{params["mode"]}/win" if @game.win
   erb :game
 end
 
 post "/:mode" do
-  session["game"].make_attempt(params["input"])
+  begin
+    session["game"].make_attempt(params["input"])
+  rescue InvalidInput
+    session["message"] = "Invalid input, try again"
+  rescue EvalMistake
+    session["message"] = "It looks like you've made a mistake in some of your evaluations"
+  end
   redirect "/#{params["mode"]}"
 end
 
