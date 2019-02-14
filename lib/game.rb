@@ -8,15 +8,9 @@ class Game
     @guesses = []
     @win = false
   end
-
-  def make_attempt(guess)
-    evaluation = evaluate(guess)
-    @win = true if evaluation == "A4B0"
-    @guesses << [guess, evaluation]
-  end
 end
 
-class PvC < Game
+class GuessGame < Game
   attr_reader :code
 
   def initialize
@@ -31,7 +25,7 @@ class PvC < Game
   end
 end
 
-class CvP < Game
+class AskGame < Game
   def initialize
     super()
     make_attempt
