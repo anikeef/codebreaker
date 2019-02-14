@@ -5,10 +5,10 @@ class EvalMistake < StandardError; end
 
 class Game
   include Evaluate
-  attr_reader :guesses, :win
+  attr_reader :history, :win
 
   def initialize
-    @guesses = []
+    @history = []
     @win = false
   end
 end
@@ -24,7 +24,7 @@ class GuessGame < Game
   def make_attempt(guess)
     raise InvalidInput unless valid_input?(guess)
     evaluation = evaluate(guess)
-    @guesses << [guess, evaluation]
+    @history << [guess, evaluation]
     @win = true if evaluation == "A4B0"
   end
 
@@ -48,14 +48,14 @@ class AskGame < Game
         @win = true
         return
       end
-      @guesses.last[1] = evaluation.upcase
-      @guesses.each do |guess_record, evaluation_record|
+      @history.last[1] = evaluation.upcase
+      @history.each do |guess_record, evaluation_record|
         answers.select! { |answer| evaluate(answer, guess_record) == evaluation_record }
       end
       raise EvalMistake if answers.empty?
     end
 
-    @guesses << [answers.sample, nil]
+    @history << [answers.sample, nil]
   end
 
   def valid_input?(input)
