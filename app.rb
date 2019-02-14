@@ -29,11 +29,13 @@ end
 get "/guess/win" do
   redirect "/" unless session["game"] && session["game"].win
   @game = session.delete("game")
-  "Win! The answer is #{@game.code}!"
+  @message = "Win! The answer is #{@game.code}!"
+  erb :gameover
 end
 
 get "/ask/win" do
   redirect "/" unless session["game"] && session["game"].win
   session.delete("game")
-  "Computer broke your code!"
+  @message = "Computer broke your code!"
+  erb :gameover
 end
