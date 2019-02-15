@@ -1,9 +1,10 @@
 <div><%= @message if @message %></div>
 <form method="post">
-  <input type="text" name="input" autofocus>
-  <input type="submit">
+  <input type="text" name="input" autofocus <%= "disabled" if @game.gameover_message %>>
+  <input type="submit" <%= "disabled" if @game.gameover_message %>>
 </form>
 <% @history.each do |guess| %>
   <p><%= guess %></p>
 <% end %>
+<p><%= @game.gameover_message if @game.gameover_message %></p>
 <a href="/">New game</a>

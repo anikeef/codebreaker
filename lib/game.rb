@@ -5,11 +5,11 @@ class EvalMistake < StandardError; end
 
 class Game
   include Evaluate
-  attr_reader :history, :win
+  attr_reader :history, :gameover_message
 
   def initialize
     @history = []
-    @win = false
+    @gameover_message = nil
   end
 end
 
@@ -25,7 +25,7 @@ class GuessGame < Game
     raise InvalidInput unless valid_input?(guess)
     evaluation = evaluate(guess)
     @history << [guess, evaluation]
-    @win = true if evaluation == "A4B0"
+    @gameover_message = "Win! The right answer is #{@code}!" if evaluation == "A4B0"
   end
 
   def valid_input?(input)
@@ -45,16 +45,19 @@ class AskGame < Game
     if evaluation
       raise InvalidInput unless valid_input?(evaluation)
       if /a4b0/i.match?(evaluation)
-        @win = true
+        @gameover_message = "Computer breaks your code!"
         return
       end
       @history.last[1] = evaluation.upcase
       @history.each do |guess_record, evaluation_record|
         answers.select! { |answer| evaluate(answer, guess_record) == evaluation_record }
       end
-      raise EvalMistake if answers.empty?
     end
 
+    if answers.empty?
+      @gameover_message = "It looks like you've made a mistake in some of your evaluations"
+      return
+    end
     @history << [answers.sample, nil]
   end
 

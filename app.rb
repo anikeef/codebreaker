@@ -15,7 +15,6 @@ get "/:mode" do
   @game = session["game"]
   @history = @game.history
   @message = session.delete("message")
-  redirect "/#{params["mode"]}/win" if @game.win
   erb :game
 end
 
@@ -24,22 +23,6 @@ post "/:mode" do
     session["game"].make_attempt(params["input"])
   rescue InvalidInput
     session["message"] = "Invalid input, try again"
-  rescue EvalMistake
-    session["message"] = "It looks like you've made a mistake in some of your evaluations"
   end
   redirect "/#{params["mode"]}"
-end
-
-get "/guess/win" do
-  redirect "/" unless session["game"] && session["game"].win
-  @game = session.delete("game")
-  @message = "Win! The answer is #{@game.code}!"
-  erb :gameover
-end
-
-get "/ask/win" do
-  redirect "/" unless session["game"] && session["game"].win
-  session.delete("game")
-  @message = "Computer broke your code!"
-  erb :gameover
 end
