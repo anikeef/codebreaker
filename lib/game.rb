@@ -1,7 +1,6 @@
 require "./lib/evaluate.rb"
 
 class InvalidInput < StandardError; end
-class EvalMistake < StandardError; end
 
 class Game
   include Evaluate
@@ -10,6 +9,7 @@ class Game
   def initialize
     @history = []
     @gameover_message = nil
+    @attempts_left = 12
   end
 end
 
@@ -25,7 +25,9 @@ class GuessGame < Game
     raise InvalidInput unless valid_input?(guess)
     evaluation = evaluate(guess)
     @history << [guess, evaluation]
+    @attempts_left -= 1
     @gameover_message = "Win! The right answer is #{@code}!" if evaluation == "A4B0"
+    @gameover_message = "You're out of attemts" if @attempts_left == 0
   end
 
   def valid_input?(input)
