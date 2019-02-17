@@ -1,27 +1,39 @@
 <div><%= @message if @message %></div>
-
-<% @history.each do |record| %>
-  <% if record.none? { |a| a.nil? } %>
-    <div><%= record[0] %></div>
-    <div><%= record[1] %></div>
-  <% else %>
-    <% break %>
+<table>
+  <% @history.each do |record| %>
+    <% if record.none? { |a| a.nil? } %>
+      <tr>
+        <td><%= record[0] %></td>
+        <td><%= record[1] %></td>
+      </tr>
+    <% else %>
+      <% break %>
+    <% end %>
   <% end %>
-<% end %>
 
-<% if @game.gameover_message %>
-  <div><%= @game.gameover_message %></div>
-<% elsif @history.last[0] %>
-  <div><%= @history.last[0] %></div>
-  <form method="post">
-    <input type="text" name="input" placeholder="Evaluation" autofocus>
-    <input type="submit" hidden>
-  </form>
-<% else %>
-  <form method="post">
-    <input type="text" name="input" placeholder="Guess" autofocus>
-    <input type="submit" hidden>
-  </form>
-  <div></div>
-<% end %>
+  <% if @game.gameover_message %>
+    <tr>
+      <td colspan="2"><%= @game.gameover_message %></td>
+    </tr>
+  <% elsif @history.last[0] %>
+    <tr>
+      <td><%= @history.last[0] %></td>
+      <td>
+        <form method="post">
+          <input type="text" name="input" placeholder="Evaluation" autofocus>
+          <input type="submit" hidden>
+        </form>
+      </td>
+    </tr>
+  <% else %>
+    <td>
+      <form method="post">
+        <input type="text" name="input" placeholder="Guess" autofocus>
+        <input type="submit" hidden>
+      </form>
+    </td>
+    <td></td>
+  <% end %>
+</table>
+
 <a href="/">New game</a>
