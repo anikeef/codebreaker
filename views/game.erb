@@ -1,5 +1,11 @@
 <div><%= @message if @message %></div>
+<div class="game">
 <table>
+  <tr>
+    <th>Guess</th>
+    <th>Evaluation</th>
+  </tr>
+
   <% @history.each do |record| %>
     <% if record.none? { |a| a.nil? } %>
       <tr>
@@ -20,20 +26,32 @@
       <td><%= @history.last[0] %></td>
       <td>
         <form method="post">
-          <input type="text" name="input" placeholder="Evaluation" autofocus>
+          <input type="text" name="input" autofocus>
           <input type="submit" hidden>
         </form>
       </td>
     </tr>
   <% else %>
-    <td>
-      <form method="post">
-        <input type="text" name="input" placeholder="Guess" autofocus>
-        <input type="submit" hidden>
-      </form>
-    </td>
-    <td></td>
+    <tr>
+      <td>
+        <form method="post">
+          <input type="text" name="input" autofocus>
+          <input type="submit" hidden>
+        </form>
+      </td>
+      <td></td>
+    </tr>
+  <% end %>
+
+  <% empty_rows = 12 - @history.size
+     empty_rows -= 1 if @game.gameover_message
+     empty_rows.times do %>
+       <tr>
+         <td></td>
+         <td></td>
+       </tr>
   <% end %>
 </table>
+</div>
 
 <a href="/">New game</a>
