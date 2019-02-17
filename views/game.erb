@@ -1,10 +1,27 @@
 <div><%= @message if @message %></div>
-<form method="post">
-  <input type="text" name="input" autofocus <%= "disabled" if @game.gameover_message %>>
-  <input type="submit" <%= "disabled" if @game.gameover_message %>>
-</form>
-<% @history.each do |guess| %>
-  <p><%= guess %></p>
+
+<% @history.each do |record| %>
+  <% if record.none? { |a| a.nil? } %>
+    <div><%= record[0] %></div>
+    <div><%= record[1] %></div>
+  <% else %>
+    <% break %>
+  <% end %>
 <% end %>
-<p><%= @game.gameover_message if @game.gameover_message %></p>
+
+<% if @game.gameover_message %>
+  <div><%= @game.gameover_message %></div>
+<% elsif @history.last[0] %>
+  <div><%= @history.last[0] %></div>
+  <form method="post">
+    <input type="text" name="input" placeholder="Evaluation" autofocus>
+    <input type="submit" hidden>
+  </form>
+<% else %>
+  <form method="post">
+    <input type="text" name="input" placeholder="Guess" autofocus>
+    <input type="submit" hidden>
+  </form>
+  <div></div>
+<% end %>
 <a href="/">New game</a>

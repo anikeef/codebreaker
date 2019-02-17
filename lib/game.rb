@@ -33,6 +33,10 @@ class GuessGame < Game
   def valid_input?(input)
     /^\d{4}$/.match?(input)
   end
+
+  def history
+    @history + [[nil, nil]]
+  end
 end
 
 class AskGame < Game
@@ -46,11 +50,11 @@ class AskGame < Game
 
     if evaluation
       raise InvalidInput unless valid_input?(evaluation)
+      @history.last[1] = evaluation.upcase
       if /a4b0/i.match?(evaluation)
         @gameover_message = "Computer breaks your code!"
         return
       end
-      @history.last[1] = evaluation.upcase
       @history.each do |guess_record, evaluation_record|
         answers.select! { |answer| evaluate(answer, guess_record) == evaluation_record }
       end
