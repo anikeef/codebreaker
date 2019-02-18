@@ -1,9 +1,17 @@
-<div><%= @message if @message %></div>
+<div class="header">
+  <a href="/" class="newgame">Новая игра</a>
+  <h1><span class="code">Code</span>Breaker</h1>
+</div>
+
+<% if @message %>
+<div class="message"><%= @message %></div>
+<% end %>
+
 <div class="game">
 <table>
   <tr>
-    <th>Guess</th>
-    <th>Evaluation</th>
+    <th>Попытка</th>
+    <th>Оценка</th>
   </tr>
 
   <% @history.each do |record| %>
@@ -19,7 +27,7 @@
 
   <% if @game.gameover_message %>
     <tr>
-      <td colspan="2"><%= @game.gameover_message %></td>
+      <td colspan="2" <%= "class=\"last\"" if @game.attempts_left == 0 %>><%= @game.gameover_message %></td>
     </tr>
   <% elsif @history.last[0] %>
     <tr>
@@ -51,7 +59,11 @@
          <td></td>
        </tr>
   <% end %>
+
+  <% unless empty_rows <= -1 %>
+    <tr>
+      <td colspan="2" class="last">Game over</td>
+    </tr>
+  <% end %>
 </table>
 </div>
-
-<a href="/">New game</a>

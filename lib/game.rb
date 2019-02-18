@@ -4,7 +4,7 @@ class InvalidInput < StandardError; end
 
 class Game
   include Evaluate
-  attr_reader :history, :gameover_message
+  attr_reader :history, :gameover_message, :attempts_left
 
   def initialize
     @history = []
@@ -26,8 +26,8 @@ class GuessGame < Game
     evaluation = evaluate(guess)
     @history << [guess, evaluation]
     @attempts_left -= 1
-    @gameover_message = "Win! The right answer is #{@code}!" if evaluation == "A4B0"
-    @gameover_message = "You're out of attemts" if @attempts_left == 0
+    @gameover_message = "Победа! Секретный код #{@code}!" if evaluation == "A4B0"
+    @gameover_message = "У вас закончились попытки. Секретный код #{@code}" if @attempts_left == 0
   end
 
   def valid_input?(input)
@@ -51,8 +51,8 @@ class AskGame < Game
     if evaluation
       raise InvalidInput unless valid_input?(evaluation)
       @history.last[1] = evaluation.upcase
-      if /a4b0/i.match?(evaluation)
-        @gameover_message = "Computer breaks your code!"
+      if /[аa]4[bв]0/i.match?(evaluation)
+        @gameover_message = "Компьютер знает ваш код!"
         return
       end
       @history.each do |guess_record, evaluation_record|
@@ -61,7 +61,7 @@ class AskGame < Game
     end
 
     if answers.empty?
-      @gameover_message = "It looks like you've made a mistake in some of your evaluations"
+      @gameover_message = "Вы где-то ошиблись"
       return
     end
     @history << [answers.sample, nil]

@@ -22,7 +22,7 @@ post "/:mode" do
   begin
     session["game"].make_attempt(params["input"])
   rescue InvalidInput
-    session["message"] = "Invalid input, try again"
+    session["message"] = "Попробуйте сделать ход по правилам"
   end
   redirect "/#{params["mode"]}"
 end
