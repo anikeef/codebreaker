@@ -70,6 +70,8 @@ a {
   width: 130px;
   text-align: center;
   display: inline-block;
+  transition: background-color 0.2s;
+  -webkit-transition: background-color 0.2s;
 }
 
 a.newgame {
