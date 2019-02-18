@@ -1,4 +1,4 @@
-require "./lib/evaluate.rb"
+require "./evaluate.rb"
 
 class InvalidInput < StandardError; end
 
