@@ -62,6 +62,8 @@ input {
 
 h1 {
   font-size: 24px;
+  font-family: "Open Sans", sans-serif;
+  font-weight: 400;
 }
 
 a {
@@ -83,6 +85,7 @@ a.newgame, h1 {
 
 span.code {
   color: rgb(69, 141, 239);
+  font-family: "Open Sans", sans-serif;
 }
 
 div.main {
