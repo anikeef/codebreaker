@@ -10,8 +10,6 @@ get "/" do
 end
 
 get "/:mode" do
-  game_class = params["mode"] == "guess" ? GuessGame : AskGame
-  session["game"] = session["game"].class == game_class ? session["game"] : game_class.new
   @game = session["game"]
   @history = @game.history
   @message = session.delete("message")
@@ -24,5 +22,11 @@ post "/:mode" do
   rescue InvalidInput
     session["message"] = "Попробуйте сделать ход по правилам"
   end
+  redirect "/#{params["mode"]}"
+end
+
+get "/:mode/new" do
+  game_class = params["mode"] == "guess" ? GuessGame : AskGame
+  session["game"] = game_class.new
   redirect "/#{params["mode"]}"
 end
