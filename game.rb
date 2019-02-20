@@ -27,7 +27,7 @@ class GuessGame < Game
     @history << [guess, evaluation]
     @attempts_left -= 1
     @gameover_message = "Победа! Секретный код #{@code}!" if evaluation == "A4B0"
-    @gameover_message = "У вас закончились попытки. Секретный код #{@code}" if @attempts_left == 0
+    @gameover_message ||= "У вас закончились попытки. Секретный код #{@code}" if @attempts_left == 0
   end
 
   def valid_input?(input)
